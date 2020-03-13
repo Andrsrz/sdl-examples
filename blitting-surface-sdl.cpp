@@ -61,8 +61,24 @@ int main(){
     dest.y = 0;
     dest.w = image->w;
     dest.h = image->h;
-
-
+    /* Blue image */
+    src2.x = 0;
+    src2.y = 0;
+    src2.w = image2->w;
+    src2.h = image2->h;
+    dest2.x = image2->w / 2;
+    dest2.y = image2->h / 2;
+    dest2.w = image2->w / 2;
+    dest2.h = image2->h / 2;
+    /* Green image */
+    src3.x = 0;
+    src3.y = 0;
+    src3.w = image3->w / 2;
+    src3.h = image3->h / 2;
+    dest3.x = 0;
+    dest3.y = image3->h / 2;
+    dest3.w = image3->w;
+    dest3.h = image3->h;
 
     /*
      * Draw the bitmap to the screen. We are using a hicolor video
@@ -70,9 +86,9 @@ int main(){
      * It is not necessary to lock surfaces before blitting; SDL
      * will handle that.
      */
-    SDL_BlitSurface(image, &src, screen, &dest);
-    SDL_BlitSurface(image2, &src, screen, &dest);
-    SDL_BlitSurface(image3, &src, screen, &dest);
+    SDL_BlitSurface(image, &src, screen, &dest); // Red
+    SDL_BlitSurface(image2, &src2, screen, &dest2); // Blue
+    SDL_BlitSurface(image3, &src3, screen, &dest3); // Green
 
     // Ask SDL to update the entire screen
     SDL_UpdateRect(screen, 0, 0, 0, 0);
@@ -82,6 +98,8 @@ int main(){
 
     // Free the memory that was allocated to the bitmap
     SDL_FreeSurface(image);
+    SDL_FreeSurface(image2);
+    SDL_FreeSurface(image3);
 
     return 0;
 }
