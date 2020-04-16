@@ -1,6 +1,4 @@
-/*
- * Butterfly class.
- */
+/* Butterfly class. */
 
 #include "butterfly.hpp"
 
