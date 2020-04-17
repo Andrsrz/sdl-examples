@@ -6,9 +6,8 @@
 #include "butterfly.hpp"
 
 const int TWO = 2;
-const int NUM_BUTTERFLIES = 15;
+const int NUM_BUTTERFLIES = 5;
 const int MAX_SPEED = 6;
-const std::vector<Butterfly> BUTTERFLIES {::NUM_BUTTERFLIES};
 
 /* This structure stores the information for one on-screen butterfly. */
 // typedef struct butterfly {
@@ -61,8 +60,11 @@ int main(){
                     SDL_SRCCOLORKEY,
                     (Uint16) SDL_MapRGB(butterfly->format,
                                         255, 255, 255));
+
+    /* vector needs to not be constant */
+    std::vector<Butterfly> butterflies {::NUM_BUTTERFLIES};
     /* Initialize the butterfly position data. */
-    initButterflies(::BUTTERFLIES, screen);
+    initButterflies(butterflies, screen);
 
     /* Animate 300 frames (approximately 10 seconds). */
     for(frames = 0; frames < 3000; frames++){
@@ -74,11 +76,11 @@ int main(){
         dest = src;
         SDL_BlitSurface(background, &src, screen, &dest);
         /* Put the butterflies on the screen. */
-        drawButterflies(::BUTTERFLIES, screen, butterfly);
+        drawButterflies(butterflies, screen, butterfly);
         /* Ask SDL to update the entire screen. */
         SDL_UpdateRect(screen, 0, 0, 0, 0);
         /* Move the butterflies for the next frame. */
-        moveButterflies(::BUTTERFLIES, screen);
+        moveButterflies(butterflies, screen);
     }
 
     /* Free the memory that was allocated to the bitmap. */
