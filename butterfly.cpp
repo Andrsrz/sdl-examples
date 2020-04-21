@@ -1,5 +1,6 @@
 /* Butterfly class. */
 
+#include <vector>
 #include "butterfly.hpp"
 
 Butterfly::Butterfly(){}

@@ -14,6 +14,9 @@ std::vector<Butterfly> drawButterflies(std::vector<Butterfly> butterflies,
 										SDL_Surface* screen,
 										SDL_Surface* butterfly);
 std::vector<Butterfly> moveButterflies(std::vector<Butterfly> butterflies, SDL_Surface* screen);
+void initButterfly(Butterfly *myButterfly, SDL_Surface* screen);
+void drawButterfly(Butterfly *myButterfly, SDL_Surface* screen, SDL_Surface* butterfly);
+void moveButterfly(Butterfly *myButterfly, SDL_Surface* screen);
 
 int main(){
 	SDL_Surface* screen;
@@ -52,10 +55,11 @@ int main(){
 					(Uint16) SDL_MapRGB(butterfly->format,
 										255, 255, 255));
 
-	/* vector needs to not be constant */
-	std::vector<Butterfly> butterflies {::NUM_BUTTERFLIES};
+	// std::vector<Butterfly> butterflies {::NUM_BUTTERFLIES};
+	Butterfly butt;
 	/* Initialize the butterfly position data. */
-	butterflies = initButterflies(butterflies, screen);
+	// butterflies = initButterflies(butterflies, screen);
+	initButterfly(&butt, screen);
 
 	/* Animate 300 frames (approximately 10 seconds). */
 	for(frames = 0; frames < 3000; frames++){
@@ -67,11 +71,13 @@ int main(){
 		dest = src;
 		SDL_BlitSurface(background, &src, screen, &dest);
 		/* Put the butterflies on the screen. */
-		butterflies = drawButterflies(butterflies, screen, butterfly);
+		// butterflies = drawButterflies(butterflies, screen, butterfly);
+		drawButterfly(&butt, screen, butterfly);
 		/* Ask SDL to update the entire screen. */
 		SDL_UpdateRect(screen, 0, 0, 0, 0);
 		/* Move the butterflies for the next frame. */
-		butterflies = moveButterflies(butterflies, screen);
+		// butterflies = moveButterflies(butterflies, screen);
+		moveButterfly(&butt, screen);
 	}
 
 	/* Free the memory that was allocated to the bitmap. */
@@ -131,4 +137,43 @@ std::vector<Butterfly> moveButterflies(std::vector<Butterfly> butterflies, SDL_S
 			butterflies[i].setDy( -butterflies[i].getDy() );
 	}
 	return butterflies;
+}
+/* ============================================================================= */
+/* This routine set a random location to our Butterfly pointer */
+void initButterfly(Butterfly *myButterfly, SDL_Surface* screen){
+	myButterfly->setX( rand() % screen->w );
+	myButterfly->setY( rand() % screen->h );
+	myButterfly->setDx( (rand() % (::MAX_SPEED * ::TWO)) - ::MAX_SPEED );
+	myButterfly->setDy( (rand() % (::MAX_SPEED * ::TWO)) - ::MAX_SPEED );
+}
+
+/* This routine draws our Butterfly pointer to the screen surface. */
+void drawButterfly(Butterfly *myButterfly, SDL_Surface* screen, SDL_Surface* butterfly){
+	SDL_Rect src, dest;
+	src.x = 0;
+	src.y = 0;
+	src.w = butterfly->w;
+	src.h = butterfly->h;
+	/*
+	 * The butterfly’s position specifies its center.
+	 * We subtract half of its width and height to get
+	 * its upper left corner.
+	*/
+	dest.x = myButterfly->getX() - butterfly->w / TWO;
+	dest.y = myButterfly->getY() - butterfly->h / TWO;
+	dest.w = butterfly->w;
+	dest.h = butterfly->h;
+	SDL_BlitSurface(butterfly, &src, screen, &dest);
+}
+
+/* This routine moves our Butterfly pointer by its motion vector. */
+void moveButterfly(Butterfly *myButterfly, SDL_Surface* screen){
+	/* Move the butterfly by its motion vector. */
+	myButterfly->setX( myButterfly->getX() + myButterfly->getDx() );
+	myButterfly->setY( myButterfly->getY() + myButterfly->getDy() );
+	/* Turn the butterfliesaround if it hits the edge of the screen. */
+	if (myButterfly->getX() < 0 || myButterfly->getX() > screen->w - 1)
+		myButterfly->setDx( -myButterfly->getDx() );
+	if (myButterfly->getY() < 0 || myButterfly->getY() > screen->h - 1)
+		myButterfly->setDy( -myButterfly->getDy() );
 }

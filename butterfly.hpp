@@ -1,5 +1,7 @@
 /* Butterfly class. */
 
+#include <vector>
+
 class Butterfly {
 	public:
 		Butterfly();
