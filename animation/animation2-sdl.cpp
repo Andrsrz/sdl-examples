@@ -3,7 +3,7 @@
 #include <iostream>
 #include <vector>
 #include <SDL/SDL.h>
-#include "butterfly.hpp"
+#include "../classes/butterfly.hpp"
 
 const int TWO = 2;
 const int NUM_BUTTERFLIES = 5;
