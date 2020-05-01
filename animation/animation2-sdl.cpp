@@ -42,7 +42,7 @@ int main(){
 	 * pixel format. This convertion will drastically improve the
 	 * performance os SDL_BlitSurface, as it will not have to
 	 * convert the surface on the fly. */
-	temp = SDL_LoadBMP("background.bmp");
+	temp = SDL_LoadBMP("../media/background.bmp");
 	background = SDL_DisplayFormat(temp);
 	if(background == NULL){
 		std::cout << "Unable to load bitmap!." << std::endl;
@@ -51,7 +51,7 @@ int main(){
 	SDL_FreeSurface(temp);
 
 	/* Load the butterfly image */
-	temp = SDL_LoadBMP("butterfly.bmp");
+	temp = SDL_LoadBMP("../media/butterfly.bmp");
 	if(temp == NULL){
 		std::cout << "Unable to load bitmap!." << std::endl;
 		return 1;

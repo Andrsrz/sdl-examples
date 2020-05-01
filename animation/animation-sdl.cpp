@@ -37,8 +37,8 @@ int main(){
 	}
 
 	/* Load the bitmap file. */
-	background = SDL_LoadBMP("background.bmp");
-	butterfly = SDL_LoadBMP("butterfly.bmp");
+	background = SDL_LoadBMP("../media/background.bmp");
+	butterfly = SDL_LoadBMP("../media/butterfly.bmp");
 	if((background == NULL) || (butterfly == NULL)){
 		std::cout << "Unable to load bitmap" << std::endl;
 		return 1;
