@@ -9,12 +9,9 @@ const int TWO = 2;
 const int NUM_BUTTERFLIES = 5;
 const int MAX_SPEED = 6;
 
-void initButterflies(std::vector<Butterfly*> butterflies, SDL_Surface* screen);
-void drawButterflies(std::vector<Butterfly*> butterflies, SDL_Surface* screen, SDL_Surface* butterfly);
-void moveButterflies(std::vector<Butterfly*> butterflies, SDL_Surface* screen);
-void initButterfly(Butterfly *myButterfly, SDL_Surface* screen);
-void drawButterfly(Butterfly *myButterfly, SDL_Surface* screen, SDL_Surface* butterfly);
-void moveButterfly(Butterfly *myButterfly, SDL_Surface* screen);
+void initButterflies(std::vector<Butterfly *> butterflies, SDL_Surface* screen);
+void drawButterflies(std::vector<Butterfly *> butterflies, SDL_Surface* screen, SDL_Surface* butterfly);
+void moveButterflies(std::vector<Butterfly *> butterflies, SDL_Surface* screen);
 
 int main(){
 	SDL_Surface *temp;
@@ -76,11 +73,16 @@ int main(){
 	}
 	SDL_FreeSurface(temp);
 
-	// std::vector<Butterfly*> butterflies {::NUM_BUTTERFLIES};
-	Butterfly butt;
+	/* Is needed that the objects are created explicitly before
+	 * stored them in the a vector. If we don't do this, our object
+	 * are not created by default, so we get a Segmentation fault. */
+	std::vector<Butterfly *> butterflies {};
+	for(int i = 0; i < ::NUM_BUTTERFLIES; i++){
+		Butterfly *butt = new Butterfly();
+		butterflies.push_back(butt);
+	}
 	/* Initialize the butterfly position data. */
-	// initButterflies(butterflies, screen);
-	initButterfly(&butt, screen);
+	initButterflies(butterflies, screen);
 
 	/* Animate 300 frames (approximately 10 seconds). */
 	for(frames = 0; frames < 3000; frames++){
@@ -92,13 +94,11 @@ int main(){
 		dest = src;
 		SDL_BlitSurface(background, &src, screen, &dest);
 		/* Put the butterflies on the screen. */
-		// drawButterflies(butterflies, screen, butterfly);
-		drawButterfly(&butt, screen, butterfly);
+		drawButterflies(butterflies, screen, butterfly);
 		/* Ask SDL to swap the back buffer to the screen. */
 		SDL_Flip(screen);
 		/* Move the butterflies for the next frame. */
-		// moveButterflies(butterflies, screen);
-		moveButterfly(&butt, screen);
+		moveButterflies(butterflies, screen);
 	}
 
 	/* Free the memory that was allocated to the bitmap. */
@@ -112,7 +112,7 @@ int main(){
  * This routine loop through the array of butterflies and sets each to a random
  * starting position and direction.
  */
-void initButterflies(std::vector<Butterfly*> butterflies, SDL_Surface* screen){
+void initButterflies(std::vector<Butterfly *> butterflies, SDL_Surface* screen){
 	for(int i = 0; i < ::NUM_BUTTERFLIES; i++){
 		butterflies[i]->setX( rand() % screen->w );
 		butterflies[i]->setY( rand() % screen->h );
@@ -122,7 +122,7 @@ void initButterflies(std::vector<Butterfly*> butterflies, SDL_Surface* screen){
 }
 
 /* This routine draws each butterfly to the screen surface. */
-void drawButterflies(std::vector<Butterfly*> butterflies, SDL_Surface* screen, SDL_Surface* butterfly){
+void drawButterflies(std::vector<Butterfly *> butterflies, SDL_Surface* screen, SDL_Surface* butterfly){
 	SDL_Rect src, dest;
 	for(int i = 0; i < ::NUM_BUTTERFLIES; i++){
 		src.x = 0;
@@ -143,7 +143,7 @@ void drawButterflies(std::vector<Butterfly*> butterflies, SDL_Surface* screen, S
 }
 
 /* This routine moves each butterfly by its motion vector. */
-void moveButterflies(std::vector<Butterfly*> butterflies, SDL_Surface* screen){
+void moveButterflies(std::vector<Butterfly *> butterflies, SDL_Surface* screen){
 	for(int i = 0; i < ::NUM_BUTTERFLIES; i++){
 		/* Move the butterfly by its motion vector. */
 		butterflies[i]->setX( butterflies[i]->getX() + butterflies[i]->getDx() );
@@ -154,44 +154,4 @@ void moveButterflies(std::vector<Butterfly*> butterflies, SDL_Surface* screen){
 		if (butterflies[i]->getY() < 0 || butterflies[i]->getY() > screen->h - 1)
 			butterflies[i]->setDy( -butterflies[i]->getDy() );
 	}
-}
-
-/* ============================================================================= */
-/* This routine set a random location to our Butterfly pointer */
-void initButterfly(Butterfly *myButterfly, SDL_Surface* screen){
-	myButterfly->setX( rand() % screen->w );
-	myButterfly->setY( rand() % screen->h );
-	myButterfly->setDx( (rand() % (::MAX_SPEED * ::TWO)) - ::MAX_SPEED );
-	myButterfly->setDy( (rand() % (::MAX_SPEED * ::TWO)) - ::MAX_SPEED );
-}
-
-/* This routine draws our Butterfly pointer to the screen surface. */
-void drawButterfly(Butterfly *myButterfly, SDL_Surface* screen, SDL_Surface* butterfly){
-	SDL_Rect src, dest;
-	src.x = 0;
-	src.y = 0;
-	src.w = butterfly->w;
-	src.h = butterfly->h;
-	/*
-	 * The butterfly’s position specifies its center.
-	 * We subtract half of its width and height to get
-	 * its upper left corner.
-	*/
-	dest.x = myButterfly->getX() - butterfly->w / TWO;
-	dest.y = myButterfly->getY() - butterfly->h / TWO;
-	dest.w = butterfly->w;
-	dest.h = butterfly->h;
-	SDL_BlitSurface(butterfly, &src, screen, &dest);
-}
-
-/* This routine moves our Butterfly pointer by its motion vector. */
-void moveButterfly(Butterfly *myButterfly, SDL_Surface* screen){
-	/* Move the butterfly by its motion vector. */
-	myButterfly->setX( myButterfly->getX() + myButterfly->getDx() );
-	myButterfly->setY( myButterfly->getY() + myButterfly->getDy() );
-	/* Turn the butterfliesaround if it hits the edge of the screen. */
-	if (myButterfly->getX() < 0 || myButterfly->getX() > screen->w - 1)
-		myButterfly->setDx( -myButterfly->getDx() );
-	if (myButterfly->getY() < 0 || myButterfly->getY() > screen->h - 1)
-		myButterfly->setDy( -myButterfly->getDy() );
 }
