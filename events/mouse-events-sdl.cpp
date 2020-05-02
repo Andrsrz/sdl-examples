@@ -61,6 +61,7 @@ int main(){
 			case SDL_MOUSEMOTION:
 				std::cout << "Mouse motion" << std::endl;
 				/* SDL provides the current position. */
+				std::cout << "Creating new butterfly at" << std::endl;
 				std::cout << "Mouse X: " << event.motion.x
 						  << ". Mouse Y: " << event.motion.y << std::endl;
 				/* We can also get relative motion. */
@@ -85,7 +86,7 @@ int main(){
 					SDL_UpdateRect(screen, 0, 0, 0, 0);
 				}
 				break;
-			case SDL_MOUSEBUTTONDOWN:{
+			case SDL_MOUSEBUTTONDOWN:
 				std::cout << "Mouse button pressed." << std::endl;
 				std::cout << "Creating new butterfly at "
 						  << event.button.x << ", " << event.button.y << std::endl;
@@ -108,7 +109,6 @@ int main(){
 					SDL_UpdateRect(screen, 0, 0, 0, 0);
 				}
 				break;
-			}
 			/* The SDL_QUIT event indicates that the window "Close"
 			 * button has been pressed. We can ignore this if we
 			 * need to, but that tends to make user rather impatient. */
