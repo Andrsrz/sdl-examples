@@ -1,4 +1,5 @@
 /* Butterfly class. */
+#pragma once
 
 class Butterfly {
 	public:
