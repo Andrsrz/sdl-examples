@@ -3,6 +3,8 @@
 #include <iostream>
 #include <SDL/SDL.h>
 
+void resetBackground(SDL_Surface* background, SDL_Rect src, SDL_Surface* screen, SDL_Rect dest);
+
 int main(){
 	SDL_Surface *screen;
 	SDL_Surface *background;
@@ -10,7 +12,7 @@ int main(){
 	SDL_Rect src, dest;
 	Uint32 colorkey;
 	SDL_Event event;
-	bool createTrail = true;
+	bool moveWithMouse = true;
 	bool createOnClick = false;
 
 	/* Initialize SDL's video system and check for erros */
@@ -67,7 +69,8 @@ int main(){
 				/* We can also get relative motion. */
 				std::cout << "That is a " << event.motion.xrel
 						  << ", " << event.motion.yrel << std::endl;
-				if(createTrail){ /* CRAZY! */
+				if(moveWithMouse){
+					resetBackground(background, src, screen, dest);
 					colorkey = SDL_MapRGB(butterfly->format, 255, 255, 255);
 					SDL_SetColorKey(butterfly, SDL_SRCCOLORKEY, colorkey);
 					src.x = 0;
@@ -121,4 +124,14 @@ int main(){
 	}
 
 	return 0;
+}
+
+void resetBackground(SDL_Surface* background, SDL_Rect src, SDL_Surface* screen, SDL_Rect dest){
+	/* Reset background to not left a butterflies trail. */
+	src.x = 0;
+	src.y = 0;
+	src.w = background->w;
+	src.h = background->h;
+	dest = src;
+	SDL_BlitSurface(background, &src, screen, &dest);
 }
