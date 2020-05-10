@@ -1,6 +1,4 @@
-/*
- * Example of direct pixel access with SDL
- */
+/* Example of direct pixel access with SDL */
 
 #include <SDL/SDL.h>
 #include <iostream>
